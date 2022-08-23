@@ -14,7 +14,7 @@ abstract class PdaRfidScannerPlatform extends PlatformInterface {
   ///
   /// Defaults to [MethodChannelPdaRfidScanner].
   static PdaRfidScannerPlatform get instance => _instance;
-  
+
   /// Platform-specific implementations should set this with their own
   /// platform-specific class that extends [PdaRfidScannerPlatform] when
   /// they register themselves.
