@@ -8,7 +8,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:pda_rfid_scanner_example/main.dart';
+// ignore: avoid_relative_lib_imports
+import '../lib/main.dart';
 
 void main() {
   testWidgets('Verify Platform version', (WidgetTester tester) async {

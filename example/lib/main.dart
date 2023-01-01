@@ -69,6 +69,13 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  startScan() async {
+    final value = await PdaRfidScanner.scanStart();
+    setState(() {
+      status = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -91,6 +98,12 @@ class _MyAppState extends State<MyApp> {
                     powerOn();
                   },
                   child: const Text('power off'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    startScan();
+                  },
+                  child: const Text('start'),
                 ),
                 Text('Running on: \n $_platformMessage'),
               ],

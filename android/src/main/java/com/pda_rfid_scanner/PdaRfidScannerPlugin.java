@@ -15,6 +15,14 @@ import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.EventChannel.StreamHandler;
 import io.reactivex.subjects.PublishSubject;
 
+import android.app.Activity;
+import android.device.ScanDevice;
+import android.content.IntentFilter;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+
 import java.math.BigInteger;
 import java.io.IOException;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
@@ -57,6 +65,30 @@ public class PdaRfidScannerPlugin implements FlutterPlugin, MethodCallHandler, A
           }
         });
   }
+  ScanDevice sm;
+  private final static String SCAN_ACTION="scan.rcv.message";
+  private String barcodeStr;
+  private int startNum=0;
+  private int endNum=0;
+
+  private BroadcastReceiver mScanReceiver=new BroadcastReceiver () {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+      Log.e ("TAG", "onReceive: "+intent.getAction ());
+        String action = intent.getAction ();
+        if (action.equals (SCAN_ACTION)){
+          
+            byte[] barocode=intent.getByteArrayExtra ("barocode");
+            int barocodelen=intent.getIntExtra ("length", 0);
+
+            barcodeStr=new String (barocode, 0, barocodelen);
+            Log.e ("TAG", "onReceive: "+ barcodeStr);
+            subject.onNext(barcodeStr + "\n");
+
+            sm.stopScan ();
+        }
+    }
+};
 
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
@@ -68,10 +100,25 @@ public class PdaRfidScannerPlugin implements FlutterPlugin, MethodCallHandler, A
       lfUtil.powerOff();
       lfClose();
       result.success("off");
+    } else if(call.method.equals("startScan")){
+      Log.e ("startScan", "started");
+      sm=new ScanDevice();
+
+      IntentFilter filter=new IntentFilter ();
+      filter.addAction (SCAN_ACTION);
+      activity.registerReceiver (mScanReceiver, filter);
+
+      boolean bool = sm.setOutScanMode(0);//启动就是广播模式
+      
+      sm.openScan();
+      sm.startScan();
+      
+      result.success("startScan started");
     } else {
       result.notImplemented();
     }
   }
+  Activity activity;
 
   @Override
   public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
@@ -80,6 +127,7 @@ public class PdaRfidScannerPlugin implements FlutterPlugin, MethodCallHandler, A
 
   @Override
   public void onAttachedToActivity(ActivityPluginBinding binding) {
+    activity = binding.getActivity();
     // binding.getActivity()
     // binding.getLifecycle()
     lfUtil = new LFUtil(data -> binding.getActivity().runOnUiThread(() -> onDataReceived(data)));

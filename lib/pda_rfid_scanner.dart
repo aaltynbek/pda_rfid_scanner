@@ -14,4 +14,8 @@ class PdaRfidScanner {
   static Future<String> powerOff() async {
     return await platform.invokeMethod('setPowerOff');
   }
+
+  static Future<String> scanStart() async {
+    return await platform.invokeMethod('startScan');
+  }
 }
