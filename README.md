@@ -20,7 +20,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  pda_rfid_scanner: ^1.0.0
+  pda_rfid_scanner: ^0.0.4
 ```
 
 Then run:

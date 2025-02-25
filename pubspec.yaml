@@ -1,6 +1,6 @@
 name: pda_rfid_scanner
 description: A Flutter plugin project for RFID scan on Blovedream PDA devices. Uses Android sdk serialport. To communicate used MethodChannel and EventChannel.
-version: 0.0.3+2
+version: 0.0.4
 homepage: https://github.com/aaltynbek/pda_rfid_scanner
 
 environment:
