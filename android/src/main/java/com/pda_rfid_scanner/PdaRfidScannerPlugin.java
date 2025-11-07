@@ -25,7 +25,6 @@ import android.util.Log;
 
 import java.math.BigInteger;
 import java.io.IOException;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 import com.pda_rfid_scanner.utils.LFUtil;
 
@@ -451,10 +450,4 @@ public class PdaRfidScannerPlugin implements FlutterPlugin, MethodCallHandler, A
     return stringBuilder.toString();
   }
 
-  /**
-   * Static method for compatibility with older Flutter versions
-   */
-  public static void registerWith(Registrar registrar) {
-    // Compatibility with old Flutter
-  }
 }
